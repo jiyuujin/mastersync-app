@@ -165,7 +165,7 @@ class LogsStatusPage extends HookConsumerWidget {
               builder: (context) {
                 return SimpleDialog(
                   title: const Text('貸出'),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                  contentPadding: const EdgeInsets.all(10.0),
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(2))),
                   children: [
