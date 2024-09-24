@@ -224,6 +224,7 @@ class LogsStatusPage extends HookConsumerWidget {
                           textColor: Colors.blue,
                           underlineColor: Colors.deepPurpleAccent,
                           dropdownList: [...result],
+                          isExpanded: true,
                           onChanged: (String? value) {
                             _assigneeName = staffs.firstWhere(
                               (s) => s['name'] == value,
