@@ -147,6 +147,9 @@ class LogsStatusPage extends HookConsumerWidget {
                       ),
                     ],
                   ),
+                  tileColor: logsStatus[index]['deleted_at'] != null
+                      ? Colors.grey[100]
+                      : Colors.white,
                 );
               },
             );
