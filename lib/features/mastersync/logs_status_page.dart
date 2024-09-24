@@ -1,6 +1,7 @@
 import 'package:base_widgets/components/dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mastersync_app/constants.dart';
 import 'package:mastersync_app/repositories/logs_status_repository.dart';
 import 'package:mastersync_app/repositories/master_repository.dart';
 import 'package:mastersync_app/repositories/staff_repository.dart';
@@ -9,7 +10,7 @@ class LogsStatusPage extends HookConsumerWidget {
   LogsStatusPage({super.key});
 
   String _masterId = '';
-  TextEditingController _assignedTeamName = TextEditingController();
+  String _assignedTeamName = '';
   String _assigneeName = '';
   TextEditingController _count = TextEditingController();
 
@@ -200,8 +201,16 @@ class LogsStatusPage extends HookConsumerWidget {
                         );
                       },
                     ),
-                    TextFormField(
-                      controller: _assignedTeamName,
+                    DropdownField(
+                      textColor: Colors.blue,
+                      underlineColor: Colors.deepPurpleAccent,
+                      dropdownList: [...assignedTeams],
+                      isExpanded: true,
+                      onChanged: (String? value) {
+                        _assignedTeamName = value!;
+                        print(value);
+                        print(_assignedTeamName);
+                      },
                     ),
                     StreamBuilder<List<Map<String, dynamic>>>(
                       stream: staffStream,
@@ -242,7 +251,7 @@ class LogsStatusPage extends HookConsumerWidget {
                       onPressed: () async {
                         await logsStatusRepositoryNotifier.insert(
                           masterId: _masterId,
-                          assignedTeamName: _assignedTeamName.text,
+                          assignedTeamName: _assignedTeamName,
                           assigneeName: _assigneeName,
                           count:
                               int.parse(_count.text != '' ? _count.text : '0'),
