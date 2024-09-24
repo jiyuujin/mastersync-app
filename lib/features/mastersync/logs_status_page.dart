@@ -141,9 +141,12 @@ class LogsStatusPage extends HookConsumerWidget {
                     },
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<ListTileTitleAlignment>>[
-                      const PopupMenuItem<ListTileTitleAlignment>(
+                      PopupMenuItem<ListTileTitleAlignment>(
                         value: ListTileTitleAlignment.threeLine,
-                        child: Text('返却'),
+                        enabled: logsStatus[index]['deleted_at'] != null
+                            ? false
+                            : true,
+                        child: const Text('返却'),
                       ),
                     ],
                   ),
