@@ -246,6 +246,9 @@ class LogsStatusPage extends HookConsumerWidget {
                     ),
                     TextFormField(
                       controller: _count,
+                      decoration: const InputDecoration(
+                        labelText: '数量',
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
