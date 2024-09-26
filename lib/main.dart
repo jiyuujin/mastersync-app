@@ -1,7 +1,10 @@
+import 'package:base_widgets/components/bottom_navigation_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mastersync_app/constants.dart';
 import 'package:mastersync_app/features/mastersync/logs_status_page.dart';
+import 'package:mastersync_app/features/setting/analysis_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -30,7 +33,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LogsStatusPage(),
+      home: BottomNavigationTab(
+        title: title,
+        tabItems: tabItems,
+        screens: [
+          LogsStatusPage(),
+          AnalysisPage(),
+        ],
+      ),
     );
   }
 }
