@@ -189,12 +189,15 @@ class LogsStatusPage extends HookConsumerWidget {
                         return DropdownField(
                           textColor: Colors.blue,
                           underlineColor: Colors.deepPurpleAccent,
-                          dropdownList: [...result],
+                          dropdownList: ['選択してください', ...result],
                           isExpanded: true,
                           onChanged: (String? value) {
                             _masterId = masters.firstWhere(
                               (s) => s['name'] == value,
                             )['id'];
+                            if (_masterId == '選択してください') {
+                              _masterId = '';
+                            }
                             print(value);
                             print(_masterId);
                           },
@@ -204,10 +207,13 @@ class LogsStatusPage extends HookConsumerWidget {
                     DropdownField(
                       textColor: Colors.blue,
                       underlineColor: Colors.deepPurpleAccent,
-                      dropdownList: [...assignedTeams],
+                      dropdownList: ['選択してください', ...assignedTeams],
                       isExpanded: true,
                       onChanged: (String? value) {
                         _assignedTeamName = value!;
+                        if (_assignedTeamName == '選択してください') {
+                          _assignedTeamName = '';
+                        }
                         print(value);
                         print(_assignedTeamName);
                       },
@@ -232,12 +238,15 @@ class LogsStatusPage extends HookConsumerWidget {
                         return DropdownField(
                           textColor: Colors.blue,
                           underlineColor: Colors.deepPurpleAccent,
-                          dropdownList: [...result],
+                          dropdownList: ['選択してください', ...result],
                           isExpanded: true,
                           onChanged: (String? value) {
                             _assigneeName = staffs.firstWhere(
                               (s) => s['name'] == value,
                             )['id'];
+                            if (_assigneeName == '選択してください') {
+                              _assigneeName = '';
+                            }
                             print(value);
                             print(_assigneeName);
                           },
