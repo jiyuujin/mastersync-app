@@ -41,121 +41,131 @@ class LogsStatusPage extends HookConsumerWidget {
               );
             }
             final logsStatus = snapshot.data!;
-            return ListView.builder(
-              itemCount: logsStatus.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: StreamBuilder<List<Map<String, dynamic>>>(
-                    stream: masterStream,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      }
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      final masters = snapshot.data!;
-                      return Text(masters.firstWhere((m) =>
-                          m['id'] == logsStatus[index]['master_id'])['name']);
-                    },
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      StreamBuilder<List<Map<String, dynamic>>>(
-                        stream: masterStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Map<String, dynamic>>>
-                                snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          }
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final masters = snapshot.data!;
-                          return Text(masters.firstWhere((m) =>
-                              m['id'] ==
-                              logsStatus[index]['master_id'])['owner_name']);
-                        },
-                      ),
-                      StreamBuilder<List<Map<String, dynamic>>>(
-                        stream: staffStream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Map<String, dynamic>>>
-                                snapshot) {
-                          if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          }
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final staffs = snapshot.data!;
-                          return Text(
-                              '${logsStatus[index]['assigned_team_name'] != '' ? logsStatus[index]['assigned_team_name'] : staffs.firstWhere((m) => m['id'] == logsStatus[index]['assignee_name'])['name']}');
-                        },
-                      ),
-                    ],
-                  ),
-                  trailing: PopupMenuButton<ListTileTitleAlignment>(
-                    onSelected: (ListTileTitleAlignment? value) async {
-                      if (value == ListTileTitleAlignment.threeLine) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('返却'),
-                              content: const Text('貸出履歴から削除します。'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('キャンセル'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () async =>
-                                      await logsStatusRepositoryNotifier
-                                          .delete(
-                                            id: logsStatus[index]['id'],
-                                            masterId: logsStatus[index]
-                                                ['master_id'],
-                                          )
-                                          .then((value) =>
-                                              Navigator.pop(context)),
-                                ),
-                              ],
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(2))),
-                            );
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverFixedExtentList(
+                  itemExtent: 75.0,
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return ListTile(
+                        title: StreamBuilder<List<Map<String, dynamic>>>(
+                          stream: masterStream,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final masters = snapshot.data!;
+                            return Text(masters.firstWhere((m) =>
+                                m['id'] ==
+                                logsStatus[index]['master_id'])['name']);
                           },
-                        );
-                      }
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            StreamBuilder<List<Map<String, dynamic>>>(
+                              stream: masterStream,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Map<String, dynamic>>>
+                                      snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                }
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                final masters = snapshot.data!;
+                                return Text(masters.firstWhere((m) =>
+                                    m['id'] ==
+                                    logsStatus[index]
+                                        ['master_id'])['owner_name']);
+                              },
+                            ),
+                            StreamBuilder<List<Map<String, dynamic>>>(
+                              stream: staffStream,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Map<String, dynamic>>>
+                                      snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                }
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                final staffs = snapshot.data!;
+                                return Text(
+                                    '${logsStatus[index]['assigned_team_name'] != '' ? logsStatus[index]['assigned_team_name'] : staffs.firstWhere((m) => m['id'] == logsStatus[index]['assignee_name'])['name']}');
+                              },
+                            ),
+                          ],
+                        ),
+                        trailing: PopupMenuButton<ListTileTitleAlignment>(
+                          onSelected: (ListTileTitleAlignment? value) async {
+                            if (value == ListTileTitleAlignment.threeLine) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('返却'),
+                                    content: const Text('貸出履歴から削除します。'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('キャンセル'),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () async =>
+                                            await logsStatusRepositoryNotifier
+                                                .delete(
+                                                  id: logsStatus[index]['id'],
+                                                  masterId: logsStatus[index]
+                                                      ['master_id'],
+                                                )
+                                                .then((value) =>
+                                                    Navigator.pop(context)),
+                                      ),
+                                    ],
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2))),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<ListTileTitleAlignment>>[
+                            PopupMenuItem<ListTileTitleAlignment>(
+                              value: ListTileTitleAlignment.threeLine,
+                              enabled: logsStatus[index]['deleted_at'] != null
+                                  ? false
+                                  : true,
+                              child: const Text('返却'),
+                            ),
+                          ],
+                        ),
+                        tileColor: logsStatus[index]['deleted_at'] != null
+                            ? Colors.grey[100]
+                            : Colors.white,
+                      );
                     },
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<ListTileTitleAlignment>>[
-                      PopupMenuItem<ListTileTitleAlignment>(
-                        value: ListTileTitleAlignment.threeLine,
-                        enabled: logsStatus[index]['deleted_at'] != null
-                            ? false
-                            : true,
-                        child: const Text('返却'),
-                      ),
-                    ],
+                    childCount: logsStatus.length,
                   ),
-                  tileColor: logsStatus[index]['deleted_at'] != null
-                      ? Colors.grey[100]
-                      : Colors.white,
-                );
-              },
+                ),
+              ],
             );
           }),
       floatingActionButton: FloatingActionButton(
